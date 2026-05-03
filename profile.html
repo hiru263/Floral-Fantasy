@@ -10,72 +10,201 @@
         :root {
             --primary-color: #ff4d94;
             --secondary-color: #ff85a2;
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(255, 255, 255, 0.4);
+            --accent-color: #ffd1e3;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
         body {
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
                         url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80');
             background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
         }
-        .profile-card {
+
+        .profile-container {
+            position: relative;
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            padding: 40px;
-            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 50px 30px 40px;
+            border-radius: 40px;
             border: 1px solid var(--glass-border);
-            width: 400px;
+            width: 420px;
             text-align: center;
-            color: #fff;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
-        .profile-card h2 { margin-bottom: 20px; }
-        .data-box { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; margin-bottom: 10px; text-align: left; }
-        .data-box p { font-size: 14px; }
-        .btn-back {
+
+        /* Decorative gradient glow */
+        .profile-container::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,77,148,0.2) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .profile-header {
+            margin-bottom: 30px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 110px; height: 110px;
+            margin: 0 auto 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            padding: 5px;
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(255, 77, 148, 0.3);
+        }
+
+        .avatar-wrapper i {
+            background: #222;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            color: #fff;
+            font-size: 50px;
+        }
+
+        h2 { 
+            color: #fff; 
+            font-weight: 600; 
+            letter-spacing: 1px;
+            font-size: 26px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: rgba(0, 255, 127, 0.2);
+            color: #00ff7f;
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 5px;
+            border: 1px solid rgba(0, 255, 127, 0.3);
+        }
+
+        .details-container {
             margin-top: 20px;
-            padding: 10px 20px;
+        }
+
+        .data-box { 
+            background: rgba(255, 255, 255, 0.08); 
+            padding: 18px 20px; 
+            border-radius: 20px; 
+            margin-bottom: 15px; 
+            text-align: left; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .data-box:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .data-box p { 
+            color: var(--accent-color); 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .data-box span { 
+            display: block;
+            color: #fff; 
+            font-size: 15px; 
+            font-weight: 400;
+        }
+
+        .data-box i {
+            margin-right: 10px;
+            width: 20px;
+            color: var(--secondary-color);
+        }
+
+        .btn-logout {
+            margin-top: 25px;
+            padding: 14px;
             width: 100%;
-            border-radius: 15px;
+            border-radius: 18px;
             border: none;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: #fff;
             font-weight: 600;
             cursor: pointer;
             text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(255, 77, 148, 0.4);
+        }
+
+        .btn-logout:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+            box-shadow: 0 15px 25px rgba(255, 77, 148, 0.5);
         }
     </style>
 </head>
 <body>
-    <div class="profile-card">
-        <i class="fas fa-user-circle fa-5x" style="margin-bottom: 20px;"></i>
-        <h2>User Profile</h2>
-        <div class="data-box">
-            <p><strong><i class="fas fa-user"></i> Name:</strong> <span id="displayName"></span></p>
+    <div class="profile-container">
+        <!-- Header Section -->
+        <div class="profile-header">
+            <div class="avatar-wrapper">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2>My Profile</h2>
+            <div class="status-badge">Active Member</div>
         </div>
-        <div class="data-box">
-            <p><strong><i class="fas fa-envelope"></i> Email:</strong> <span id="displayEmail"></span></p>
+
+        <!-- Info Section -->
+        <div class="details-container">
+            <div class="data-box">
+                <p>Full Name</p>
+                <span><i class="fas fa-user-circle"></i> <span id="displayName" style="display:inline;"></span></span>
+            </div>
+            <div class="data-box">
+                <p>Email Address</p>
+                <span><i class="fas fa-envelope"></i> <span id="displayEmail" style="display:inline;"></span></span>
+            </div>
+            <div class="data-box">
+                <p>Contact Number</p>
+                <span><i class="fas fa-phone-alt"></i> <span id="displayPhone" style="display:inline;"></span></span>
+            </div>
+            <div class="data-box">
+                <p>Home Location</p>
+                <span><i class="fas fa-map-marker-alt"></i> <span id="displayAddress" style="display:inline;"></span></span>
+            </div>
         </div>
-        <!-- Display Mobile Number -->
-        <div class="data-box">
-            <p><strong><i class="fas fa-phone"></i> Mobile:</strong> <span id="displayPhone"></span></p>
-        </div>
-        <!-- Display Home Address -->
-        <div class="data-box">
-            <p><strong><i class="fas fa-map-marker-alt"></i> Address:</strong> <span id="displayAddress"></span></p>
-        </div>
-        <button class="btn-back" onclick="window.location.href='index.html'">Logout</button>
+
+        <button class="btn-logout" onclick="logout()">Logout</button>
     </div>
 
     <script>
-        // Retrieve data from localStorage and display
-        document.getElementById('displayName').innerText = localStorage.getItem('userName') || "N/A";
-        document.getElementById('displayEmail').innerText = localStorage.getItem('userEmail') || "N/A";
-        document.getElementById('displayPhone').innerText = localStorage.getItem('userPhone') || "N/A";
-        document.getElementById('displayAddress').innerText = localStorage.getItem('userAddress') || "N/A";
+        // Use the same logic as before to display data
+        document.getElementById('displayName').innerText = localStorage.getItem('userName') || "Guest User";
+        document.getElementById('displayEmail').innerText = localStorage.getItem('userEmail') || "No Email Provided";
+        document.getElementById('displayPhone').innerText = localStorage.getItem('userPhone') || "No Contact";
+        document.getElementById('displayAddress').innerText = localStorage.getItem('userAddress') || "No Address Set";
+
+        // Logout function logic
+        function logout() {
+            // Optional: clear specific data or just redirect
+            window.location.href = 'index.html'; 
+        }
     </script>
 </body>
 </html>
