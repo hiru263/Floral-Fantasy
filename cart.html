@@ -21,12 +21,11 @@
         <a href="customer.html" style="text-decoration: none; color: var(--primary-color); font-weight: 600;"><i class="fas fa-arrow-left"></i> Back to Shop</a>
         <h2 style="margin: 20px 0;">Your <span style="color: var(--primary-color);">Shopping Cart</span></h2>
         
-        <!-- Area where cart items will be listed -->
         <div id="cartItems"></div>
         
-        <!-- Area for Total Price -->
         <div id="cartTotal" style="margin-top: 20px; text-align: right; font-weight: 600; font-size: 1.2em;"></div>
-        <button id="checkoutBtn" class="btn-checkout" onclick="proceedToCheckout()" style="display: none;">Proceed to Checkout</button>
+        <!-- Button changed to Buy Now -->
+        <button id="checkoutBtn" class="btn-checkout" onclick="proceedToBuy()" style="display: none;">Buy Now</button>
     </div>
 
     <script>
@@ -36,7 +35,6 @@
             const container = document.getElementById('cartItems');
             let total = 0;
 
-            // If cart is empty, show message and hide button
             if (cart.length === 0) {
                 container.innerHTML = '<div class="empty-msg"><i class="fas fa-shopping-basket fa-3x"></i><p><br>Your cart is empty!</p></div>';
                 document.getElementById('checkoutBtn').style.display = 'none';
@@ -44,12 +42,9 @@
                 return;
             }
 
-            // Clear container and loop through cart items
             container.innerHTML = '';
             cart.forEach((item, index) => {
-                // Sum up the total price (ensure it's treated as a number)
                 total += parseFloat(item.price);
-                
                 container.innerHTML += `
                     <div class="cart-item">
                         <div>
@@ -60,37 +55,51 @@
                     </div>`;
             });
 
-            // Display the final Total Price
             document.getElementById('cartTotal').innerText = 'Total: Rs. ' + total.toFixed(2);
             document.getElementById('checkoutBtn').style.display = 'block';
         }
 
-        // REMOVE ITEM FUNCTION
         function removeItem(index) {
             let cart = JSON.parse(localStorage.getItem('user_cart'));
-            // Remove the specific item from the array using index
             cart.splice(index, 1);
-            // Update localStorage with the new array
             localStorage.setItem('user_cart', JSON.stringify(cart));
-            // Refresh the display
             renderCart();
         }
 
-        function proceedToCheckout() {
-            // Check if user info exists in localStorage (Simulation of Login)
+        // PROCEED TO BUY FUNCTION
+        function proceedToBuy() {
+            let cart = JSON.parse(localStorage.getItem('user_cart')) || [];
+            let sales = JSON.parse(localStorage.getItem('sales_report')) || [];
             let loggedUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
             if (!loggedUser) {
                 alert("Please Register/Login to complete your purchase!");
                 window.location.href = 'login.html';
-            } else {
-                alert("Order placed successfully! Total Amount Paid: " + document.getElementById('cartTotal').innerText);
-                // Optional: Clear cart after successful checkout
-                localStorage.removeItem('user_cart');
-                renderCart();
+                return;
             }
+
+            // Calculate total and add to Sales Report for Admin
+            const total = cart.reduce((sum, item) => sum + parseFloat(item.price), 0);
+            
+            // Create a sales entry
+            const orderEntry = {
+                customer: loggedUser.name || "Guest",
+                items: cart.map(i => i.name).join(", "),
+                amount: total.toFixed(2),
+                date: new Date().toLocaleString()
+            };
+
+            // Save to sales report localStorage for admin access
+            sales.push(orderEntry);
+            localStorage.setItem('sales_report', JSON.stringify(sales));
+
+            alert("Purchase Successful! Order details sent to Admin.");
+            
+            // Clear cart after buy
+            localStorage.removeItem('user_cart');
+            renderCart();
         }
 
-        // Initial call to display items
         renderCart();
     </script>
 </body>
