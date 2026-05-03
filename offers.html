@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Offers | Floral Haven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary-color: #ff4d94; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f0f2f5; padding: 40px; }
+        .container { max-width: 1000px; margin: auto; }
+        .header { display: flex; align-items: center; margin-bottom: 30px; }
+        .btn-back { text-decoration: none; color: #555; font-weight: 600; margin-right: 20px; }
+        .offer-badge { background: #ff4d94; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin-bottom: 10px; display: inline-block; }
+        .flower-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
+        .flower-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); text-align: center; padding-bottom: 20px; }
+        .flower-card img { width: 100%; height: 200px; object-fit: cover; }
+        .price { color: var(--primary-color); font-weight: bold; font-size: 20px; margin: 10px 0; }
+        .btn-buy { background: var(--primary-color); color: white; border: none; padding: 12px 30px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <a href="customer.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Shop</a>
+        <h1>Special <span style="color: var(--primary-color);">Offers</span></h1>
+    </div>
+
+    <div style="background: #fff0f6; padding: 20px; border-radius: 15px; margin-bottom: 30px; border: 1px dashed #ff4d94;">
+        <h3 style="color: #ff4d94;">🎉 Congratulations!</h3>
+        <p>When you purchase any bouquet on this page, you will receive a free **Greeting Card** worth Rs. 500!</p>
+    </div>
+
+    <div id="offerDisplay" class="flower-grid">
+        <!-- Offers will be filtered and rendered here -->
+    </div>
+</div>
+
+<script>
+    // Get inventory added by Admin
+    let flowers = JSON.parse(localStorage.getItem('floral_inventory')) || [];
+
+    function renderOffers() {
+        const container = document.getElementById('offerDisplay');
+        container.innerHTML = '';
+
+        // Select only flowers with a price greater than or equal to Rs. 2500
+        let highValueFlowers = flowers.filter(f => parseFloat(f.price) >= 2500);
+
+        if(highValueFlowers.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                    <i class="fas fa-box-open" style="font-size: 50px; color: #ccc;"></i>
+                    <p style="margin-top: 10px; color: #999;">Currently, there are no special offers above Rs. 2500. Please check back later.</p>
+                </div>`;
+            return;
+        }
+
+        highValueFlowers.forEach(f => {
+            container.innerHTML += `
+                <div class="flower-card">
+                    <img src="${f.url}" onerror="this.src='https://via.placeholder.com/250x200'">
+                    <div style="padding: 15px;">
+                        <span class="offer-badge">+ Free Card</span>
+                        <h4>${f.name}</h4>
+                        <p class="price">Rs. ${f.price}</p>
+                        <button class="btn-buy" onclick="alert('Order Placed with Free Greeting Card!')">Buy with Offer</button>
+                    </div>
+                </div>`;
+        });
+    }
+
+    renderOffers();
+</script>
+
+</body>
+</html>
