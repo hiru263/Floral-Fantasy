@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Floral Haven | Login</title>
+    <title>Floral Haven | Login & Register</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -22,7 +22,7 @@
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
         }
-        #login-section {
+        #login-section, #register-section {
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
             padding: 50px 40px;
@@ -32,6 +32,9 @@
             text-align: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
+        /* Hide register section by default */
+        #register-section { display: none; }
+
         h2 { color: #fff; margin-bottom: 20px; }
         .input-box { position: relative; margin-bottom: 25px; }
         .input-box input {
@@ -44,7 +47,7 @@
             outline: none;
         }
         .input-box i { position: absolute; left: 15px; top: 15px; color: #fff; }
-        .btn-login {
+        .btn-login, .btn-reg {
             width: 100%;
             padding: 12px;
             border-radius: 15px;
@@ -55,9 +58,20 @@
             cursor: pointer;
             text-transform: uppercase;
         }
+        .register-link, .login-link {
+            display: block;
+            margin-top: 15px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .register-link b, .login-link b { text-decoration: underline; }
     </style>
 </head>
 <body>
+    
+    <!-- Login Section -->
     <div id="login-section">
         <i class="fas fa-spa fa-4x" style="color: #fff; margin-bottom: 15px;"></i>
         <h2>Member Login</h2>
@@ -70,20 +84,92 @@
             <input type="password" id="userPassword" placeholder="Password">
         </div>
         <button class="btn-login" onclick="handleLogin()">Login Now</button>
+        
+        <!-- Toggle to Register -->
+        <a class="register-link" onclick="toggleForm('register')">Don't have an account? <b>Register</b></a>
+        
         <p style="color: #eee; margin-top: 15px; font-size: 13px;">Hint: admin@site.com / 123</p>
     </div>
 
+    <!-- Register Section -->
+    <div id="register-section">
+        <i class="fas fa-user-plus fa-4x" style="color: #fff; margin-bottom: 15px;"></i>
+        <h2>Create Account</h2>
+        <div class="input-box">
+            <i class="fas fa-user"></i>
+            <input type="text" id="regName" placeholder="Full Name">
+        </div>
+        <div class="input-box">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="regEmail" placeholder="Email Address">
+        </div>
+        <!-- Added Mobile Number Input -->
+        <div class="input-box">
+            <i class="fas fa-phone"></i>
+            <input type="text" id="regPhone" placeholder="Mobile Number">
+        </div>
+        <!-- Added Home Address Input -->
+        <div class="input-box">
+            <i class="fas fa-map-marker-alt"></i>
+            <input type="text" id="regAddress" placeholder="Home Address">
+        </div>
+        <div class="input-box">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="regPassword" placeholder="Password">
+        </div>
+        <button class="btn-reg" onclick="handleRegister()">Register Now</button>
+        
+        <!-- Toggle to Login -->
+        <a class="login-link" onclick="toggleForm('login')">Already have an account? <b>Login</b></a>
+    </div>
+
     <script>
+        // Function to toggle between Login and Register forms
+        function toggleForm(form) {
+            if(form === 'register') {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('register-section').style.display = 'block';
+            } else {
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('register-section').style.display = 'none';
+            }
+        }
+
         function handleLogin() {
             const email = document.getElementById('userEmail').value;
             const pass = document.getElementById('userPassword').value;
 
+            // Admin login logic
             if (email === "admin@site.com" && pass === "123") {
                 window.location.href = "admin.html";
-            } else if (email !== "" && pass !== "") {
+            } 
+            // Customer login logic
+            else if (email !== "" && pass !== "") {
                 window.location.href = "customer.html";
             } else {
                 alert("Please enter valid credentials!");
+            }
+        }
+
+        // Logic to handle Registration
+        function handleRegister() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const address = document.getElementById('regAddress').value;
+            const pass = document.getElementById('regPassword').value;
+
+            if (name !== "" && email !== "" && phone !== "" && address !== "" && pass !== "") {
+                // Save data to localStorage
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userPhone', phone);
+                localStorage.setItem('userAddress', address);
+                
+                alert("Registration Successful!");
+                window.location.href = "profile.html";
+            } else {
+                alert("Please fill all fields!");
             }
         }
     </script>
