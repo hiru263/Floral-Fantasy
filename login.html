@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floral Haven | Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff4d94;
+            --secondary-color: #ff85a2;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                        url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+        #login-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            padding: 50px 40px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        h2 { color: #fff; margin-bottom: 20px; }
+        .input-box { position: relative; margin-bottom: 25px; }
+        .input-box input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+        }
+        .input-box i { position: absolute; left: 15px; top: 15px; color: #fff; }
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            border: none;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-section">
+        <i class="fas fa-spa fa-4x" style="color: #fff; margin-bottom: 15px;"></i>
+        <h2>Member Login</h2>
+        <div class="input-box">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="userEmail" placeholder="Email Address">
+        </div>
+        <div class="input-box">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="userPassword" placeholder="Password">
+        </div>
+        <button class="btn-login" onclick="handleLogin()">Login Now</button>
+        <p style="color: #eee; margin-top: 15px; font-size: 13px;">Hint: admin@site.com / 123</p>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const email = document.getElementById('userEmail').value;
+            const pass = document.getElementById('userPassword').value;
+
+            if (email === "admin@site.com" && pass === "123") {
+                window.location.href = "admin.html";
+            } else if (email !== "" && pass !== "") {
+                window.location.href = "customer.html";
+            } else {
+                alert("Please enter valid credentials!");
+            }
+        }
+    </script>
+</body>
+</html>
