@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | Floral Haven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary-color: #ff4d94; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f0f2f5; padding: 40px; display: flex; justify-content: center; }
+        .profile-card { background: white; width: 400px; padding: 40px; border-radius: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .user-icon { font-size: 80px; color: var(--primary-color); margin-bottom: 20px; }
+        .info-box { text-align: left; margin-top: 30px; background: #fafafa; padding: 15px; border-radius: 10px; }
+        .btn-back { display: block; margin-top: 20px; color: var(--primary-color); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <div class="user-icon"><i class="fas fa-user-circle"></i></div>
+        <h2 id="userName">User Profile</h2>
+        <p style="color: #888;">Member of Bloom Shop</p>
+
+        <div class="info-box">
+            <p><strong>Name:</strong> <span id="dispName">N/A</span></p>
+            <p><strong>Email:</strong> <span id="dispEmail">N/A</span></p>
+        </div>
+
+        <a href="customer.html" class="btn-back">Return to Shop</a>
+    </div>
+
+    <script>
+        // Display logged-in user data
+        window.onload = function() {
+            let user = JSON.parse(localStorage.getItem('loggedInUser'));
+            if (user) {
+                document.getElementById('dispName').innerText = user.name || 'Valued Customer';
+                document.getElementById('dispEmail').innerText = user.email || 'No email provided';
+                document.getElementById('userName').innerText = user.name;
+            } else {
+                alert("Please login first!");
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>
