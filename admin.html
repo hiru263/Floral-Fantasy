@@ -18,25 +18,30 @@
         .content-area { flex: 1; padding: 40px; overflow-y: auto; background: #fafafa; }
         .section { display: none; }
         .active-section { display: block; }
-        .form-group { margin-bottom: 15px; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; }
         .btn-add { background: var(--primary-color); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600; }
         .flower-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
         .flower-card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #f0f0f0; }
         .flower-card img { width: 100%; height: 160px; object-fit: cover; }
         .flower-info { padding: 15px; }
         .delete-btn { color: #ff4d4d; cursor: pointer; border: none; background: none; font-weight: 600; }
+        
+        /* Sales Report Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: var(--admin-red); color: white; }
     </style>
 </head>
 <body>
     <div class="main-container">
         <div class="sidebar">
             <h2><i class="fas fa-user-cog"></i> Shop Admin</h2>
-            <div class="nav-link active-nav" onclick="showSection('inventory')"><i class="fas fa-seedling"></i> Inventory</div>
-            <div class="nav-link" onclick="showSection('sales-report')"><i class="fas fa-chart-pie"></i> Sales Report</div>
+            <div id="nav-inventory" class="nav-link active-nav" onclick="showSection('inventory')"><i class="fas fa-seedling"></i> Inventory</div>
+            <div id="nav-sales" class="nav-link" onclick="showSection('sales-report')"><i class="fas fa-chart-pie"></i> Sales Report</div>
             <div class="nav-link" onclick="window.location.href='login.html'" style="margin-top: 50px; color: #999;"><i class="fas fa-sign-out-alt"></i> Logout</div>
         </div>
         <div class="content-area">
+            <!-- Inventory Section -->
             <div id="inventory" class="section active-section">
                 <h1>Flower <span style="color: var(--primary-color);">Inventory</span></h1>
                 <div style="background: white; padding: 25px; border-radius: 20px; border: 1px solid #eee;">
@@ -48,16 +53,37 @@
                 </div>
                 <div id="displayArea" class="flower-grid"></div>
             </div>
-            <div id="sales-report" class="section"><h1>Sales Report</h1></div>
+
+            <!-- Sales Report Section -->
+            <div id="sales-report" class="section">
+                <h1>Sales <span style="color: var(--admin-red);">Report</span></h1>
+                <div id="reportContainer">
+                    <!-- Table will be injected here -->
+                </div>
+                <button class="btn-add" style="margin-top: 20px; background: #666;" onclick="clearSales()">Clear Sales History</button>
+            </div>
         </div>
     </div>
 
     <script>
+        // Load data from localStorage
         let flowers = JSON.parse(localStorage.getItem('floral_inventory')) || [];
+        let sales = JSON.parse(localStorage.getItem('sales_report')) || [];
+
+        // Switching sections
         function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active-nav'));
+            
             document.getElementById(id).classList.add('active-section');
+            if(id === 'inventory') document.getElementById('nav-inventory').classList.add('active-nav');
+            if(id === 'sales-report') {
+                document.getElementById('nav-sales').classList.add('active-nav');
+                renderSales(); // Refresh sales report when opening
+            }
         }
+
+        // Inventory Functions
         function addFlower() {
             const name = document.getElementById('flowerName').value;
             const price = document.getElementById('flowerPrice').value;
@@ -69,6 +95,7 @@
                 renderFlowers();
             }
         }
+
         function renderFlowers() {
             const container = document.getElementById('displayArea');
             container.innerHTML = '';
@@ -83,11 +110,58 @@
                 </div>`;
             });
         }
+
         function deleteFlower(i) {
             flowers.splice(i, 1);
             localStorage.setItem('floral_inventory', JSON.stringify(flowers));
             renderFlowers();
         }
+
+        // SALES REPORT FUNCTIONS
+        function renderSales() {
+            let salesData = JSON.parse(localStorage.getItem('sales_report')) || [];
+            const container = document.getElementById('reportContainer');
+            
+            if(salesData.length === 0) {
+                container.innerHTML = '<p style="margin-top:20px; color:#999;">No sales recorded yet.</p>';
+                return;
+            }
+
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total (Rs.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            salesData.forEach(s => {
+                tableHTML += `
+                    <tr>
+                        <td>${s.date}</td>
+                        <td>${s.customer}</td>
+                        <td>${s.items}</td>
+                        <td>${s.amount}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `</tbody></table>`;
+            container.innerHTML = tableHTML;
+        }
+
+        function clearSales() {
+            if(confirm("Are you sure you want to clear all sales data?")) {
+                localStorage.removeItem('sales_report');
+                renderSales();
+            }
+        }
+
         renderFlowers();
     </script>
 </body>
