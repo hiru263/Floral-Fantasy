@@ -24,13 +24,13 @@
         <div id="cartItems"></div>
         
         <div id="cartTotal" style="margin-top: 20px; text-align: right; font-weight: 600; font-size: 1.2em;"></div>
-        <!-- Button changed to Buy Now -->
+        <!-- This button will now process the order immediately -->
         <button id="checkoutBtn" class="btn-checkout" onclick="proceedToBuy()" style="display: none;">Buy Now</button>
     </div>
 
     <script>
         function renderCart() {
-            // Retrieve cart items from localStorage
+            // Get items from local storage
             let cart = JSON.parse(localStorage.getItem('user_cart')) || [];
             const container = document.getElementById('cartItems');
             let total = 0;
@@ -66,36 +66,33 @@
             renderCart();
         }
 
-        // PROCEED TO BUY FUNCTION
+        // Updated function: No login check, saves data to Admin's Sales Report
         function proceedToBuy() {
             let cart = JSON.parse(localStorage.getItem('user_cart')) || [];
             let sales = JSON.parse(localStorage.getItem('sales_report')) || [];
-            let loggedUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            
+            // Check if there is a logged in user, else label as Guest
+            let loggedUser = JSON.parse(localStorage.getItem('loggedInUser')) || { name: "Guest User" };
 
-            if (!loggedUser) {
-                alert("Please Register/Login to complete your purchase!");
-                window.location.href = 'login.html';
-                return;
-            }
-
-            // Calculate total and add to Sales Report for Admin
+            // Calculate final total
             const total = cart.reduce((sum, item) => sum + parseFloat(item.price), 0);
             
-            // Create a sales entry
+            // Create the order object for the Admin to see
             const orderEntry = {
-                customer: loggedUser.name || "Guest",
+                customer: loggedUser.name,
                 items: cart.map(i => i.name).join(", "),
                 amount: total.toFixed(2),
                 date: new Date().toLocaleString()
             };
 
-            // Save to sales report localStorage for admin access
+            // Save to the sales_report list
             sales.push(orderEntry);
             localStorage.setItem('sales_report', JSON.stringify(sales));
 
-            alert("Purchase Successful! Order details sent to Admin.");
+            // Success Message
+            alert("Order Successful! Your flowers will be delivered soon.");
             
-            // Clear cart after buy
+            // Clear the cart and refresh
             localStorage.removeItem('user_cart');
             renderCart();
         }
