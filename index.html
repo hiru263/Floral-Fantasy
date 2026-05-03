@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Floral-Fantasy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                        url('https://img.freepik.com/premium-photo/lotus-flower-with-candle-middle-it_1226103-904.jpg?semt=ais_hybrid&w=740&q=80') ;
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: #f0f0f0;
+        }
+
+        .btn-start {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            background: linear-gradient(45deg, #ff4d94, #ff85a2);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 77, 148, 0.4);
+            text-transform: uppercase;
+            border: 2px solid transparent;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 77, 148, 0.6);
+            background: transparent;
+            border-color: #ff4d94;
+            color: #ff4d94;
+        }
+
+        .flower-icon {
+            font-size: 3rem;
+            color: #ff4d94;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="flower-icon">
+                <i class="fas fa-spa"></i>
+            </div>
+            <h1>Floral-Fantasy</h1>
+            <p>A responsive E-commerce web application for a premium flower boutique, featuring an intuitive user interface for browsing floral collections and managing online orders.</p>
+            <a href="login.html" class="btn-start">Explore Shop <i class="fas fa-arrow-right" style="margin-left: 10px;"></i></a>
+        </div>
+    </div>
+
+</body>
+</html>
