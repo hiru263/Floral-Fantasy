@@ -22,8 +22,6 @@
         .flower-info { padding: 15px; }
         .btn-buy { background: var(--primary-color); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: 600; margin-bottom: 5px; }
         .btn-cart { background: #f0f2f5; color: #333; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: 600; font-size: 0.9em; }
-
-        /* Existing space fillers */
         .promo-banner { background: linear-gradient(135deg, #ff4d94, #ff85b3); color: white; padding: 35px; border-radius: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 20px rgba(255, 77, 148, 0.2); }
         .promo-content h2 { font-size: 28px; margin-bottom: 5px; }
         .btn-claim { background: white; color: var(--primary-color); border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; text-decoration: none; }
@@ -32,8 +30,6 @@
         .feature-card i { color: var(--primary-color); font-size: 24px; margin-bottom: 10px; }
         .feature-card h4 { font-size: 16px; color: #333; }
         .feature-card p { font-size: 12px; color: #888; }
-
-        /* Payment Modal Styling */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 30px; border-radius: 20px; width: 400px; text-align: center; }
         .payment-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
@@ -102,6 +98,7 @@
     </div>
 
     <script>
+        // Load inventory from localStorage
         let flowers = JSON.parse(localStorage.getItem('floral_inventory')) || [];
 
         function renderFlowers() {
@@ -121,13 +118,26 @@
                             <h4>${f.name}</h4>
                             <p style="color:var(--primary-color); font-weight:600; margin-bottom:10px;">Rs. ${f.price}</p>
                             <button class="btn-buy" onclick="openPayment('${f.name}', '${f.price}')">Buy Now</button>
-                            <button class="btn-cart" onclick="addToCart('${f.name}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                            <button class="btn-cart" onclick="addToCart('${f.name}', '${f.price}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
                         </div>
                     </div>`;
             });
         }
 
-        // Functions for interactivity
+        // ADD TO CART FUNCTION
+        function addToCart(name, price) {
+            // Get existing cart or create a new empty array
+            let cart = JSON.parse(localStorage.getItem('user_cart')) || [];
+            
+            // Push new item object to the array
+            cart.push({ name: name, price: price });
+            
+            // Save updated array back to localStorage
+            localStorage.setItem('user_cart', JSON.stringify(cart));
+            
+            alert(name + ' has been added to your cart!');
+        }
+
         function openPayment(name, price) {
             document.getElementById('payFor').innerText = "Payment for: " + name + " (Rs. " + price + ")";
             document.getElementById('paymentModal').style.display = 'flex';
@@ -140,11 +150,6 @@
         function completePayment() {
             alert('Payment Successful! Your flowers are on the way.');
             closeModal();
-        }
-
-        function addToCart(name) {
-            alert(name + ' added to your shopping cart!');
-            // You can add logic here to save to a 'cart' localStorage if needed
         }
 
         renderFlowers();

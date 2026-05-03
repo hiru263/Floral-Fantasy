@@ -21,18 +21,22 @@
         <a href="customer.html" style="text-decoration: none; color: var(--primary-color); font-weight: 600;"><i class="fas fa-arrow-left"></i> Back to Shop</a>
         <h2 style="margin: 20px 0;">Your <span style="color: var(--primary-color);">Shopping Cart</span></h2>
         
+        <!-- Area where cart items will be listed -->
         <div id="cartItems"></div>
         
+        <!-- Area for Total Price -->
         <div id="cartTotal" style="margin-top: 20px; text-align: right; font-weight: 600; font-size: 1.2em;"></div>
         <button id="checkoutBtn" class="btn-checkout" onclick="proceedToCheckout()" style="display: none;">Proceed to Checkout</button>
     </div>
 
     <script>
         function renderCart() {
+            // Retrieve cart items from localStorage
             let cart = JSON.parse(localStorage.getItem('user_cart')) || [];
             const container = document.getElementById('cartItems');
             let total = 0;
 
+            // If cart is empty, show message and hide button
             if (cart.length === 0) {
                 container.innerHTML = '<div class="empty-msg"><i class="fas fa-shopping-basket fa-3x"></i><p><br>Your cart is empty!</p></div>';
                 document.getElementById('checkoutBtn').style.display = 'none';
@@ -40,9 +44,12 @@
                 return;
             }
 
+            // Clear container and loop through cart items
             container.innerHTML = '';
             cart.forEach((item, index) => {
+                // Sum up the total price (ensure it's treated as a number)
                 total += parseFloat(item.price);
+                
                 container.innerHTML += `
                     <div class="cart-item">
                         <div>
@@ -53,29 +60,37 @@
                     </div>`;
             });
 
-            document.getElementById('cartTotal').innerText = 'Total: Rs. ' + total;
+            // Display the final Total Price
+            document.getElementById('cartTotal').innerText = 'Total: Rs. ' + total.toFixed(2);
             document.getElementById('checkoutBtn').style.display = 'block';
         }
 
+        // REMOVE ITEM FUNCTION
         function removeItem(index) {
             let cart = JSON.parse(localStorage.getItem('user_cart'));
+            // Remove the specific item from the array using index
             cart.splice(index, 1);
+            // Update localStorage with the new array
             localStorage.setItem('user_cart', JSON.stringify(cart));
+            // Refresh the display
             renderCart();
         }
 
         function proceedToCheckout() {
-            // Check if the customer is logged in
+            // Check if user info exists in localStorage (Simulation of Login)
             let loggedUser = JSON.parse(localStorage.getItem('loggedInUser'));
             if (!loggedUser) {
                 alert("Please Register/Login to complete your purchase!");
                 window.location.href = 'login.html';
             } else {
-                alert("Redirecting to payment...");
-                // Link to payment page or existing modal here
+                alert("Order placed successfully! Total Amount Paid: " + document.getElementById('cartTotal').innerText);
+                // Optional: Clear cart after successful checkout
+                localStorage.removeItem('user_cart');
+                renderCart();
             }
         }
 
+        // Initial call to display items
         renderCart();
     </script>
 </body>
